@@ -1,0 +1,402 @@
+/*
+  Titan Applications — "early 2000s desktop" theme.
+
+  Modern techniques in use:
+  - Custom properties (design tokens) for one-line re-theming.
+  - Fluid typography via clamp() so text scales without media-query soup.
+  - Flexbox + Grid for layout instead of the spacer-GIF tables of the era.
+  - prefers-reduced-motion to switch the marquee/animations off respectfully.
+  The *look* is retro; the implementation is not.
+*/
+
+:root {
+  color-scheme: light;
+
+  --c-desktop-1: #0a3a5c;
+  --c-desktop-2: #0e7c86;
+  --c-face: #c3cad3;
+  --c-face-light: #e7ebf0;
+  --c-face-dark: #828b97;
+  --c-ink: #10151c;
+  --c-title-1: #0a1f8f;
+  --c-title-2: #2a6cf0;
+  --c-accent: #d81e5b;
+  --c-link: #0a3a5c;
+  --c-led: #36ff6a;
+
+  --bevel-out: #ffffff var(--c-face-dark) var(--c-face-dark) #ffffff;
+  --bevel-in: var(--c-face-dark) #ffffff #ffffff var(--c-face-dark);
+
+  --font-ui: 'Tahoma', 'Verdana', 'Geneva', sans-serif;
+  --font-mono: 'Courier New', 'Lucida Console', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  --frame-pad: clamp(0.5rem, 2vw, 2rem);
+  font-family: var(--font-ui);
+  color: var(--c-ink);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--frame-pad);
+  background-color: var(--c-desktop-1);
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.7) 0 1px, transparent 1px),
+    radial-gradient(circle at 72% 64%, rgba(255, 255, 255, 0.55) 0 1px, transparent 1px),
+    radial-gradient(circle at 42% 88%, rgba(255, 255, 255, 0.45) 0 1px, transparent 1px),
+    linear-gradient(160deg, var(--c-desktop-1), var(--c-desktop-2));
+  background-size: 140px 140px, 200px 200px, 320px 320px, cover;
+}
+
+/* ---------- The window ---------- */
+.window {
+  width: min(960px, 100%);
+  max-height: min(780px, calc(100dvh - (2 * var(--frame-pad))));
+  display: flex;
+  flex-direction: column;
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+  box-shadow:
+    inset 1px 1px 0 var(--c-face-light),
+    inset -1px -1px 0 #6c7682,
+    8px 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.window__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 4px 4px 4px 8px;
+  margin: 3px;
+  color: #fff;
+  background: linear-gradient(90deg, var(--c-title-1), var(--c-title-2));
+}
+
+.window__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+  letter-spacing: 0.2px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.window__icon {
+  color: #ffd86b;
+}
+
+.window__controls {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.window__control {
+  width: 20px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  color: #000;
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+}
+
+/* ---------- Navigation (tab buttons) ---------- */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 6px 6px;
+}
+
+.nav__link {
+  font: inherit;
+  font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+  text-decoration: none;
+  color: var(--c-ink);
+  padding: 5px 14px;
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+}
+
+.nav__link:hover {
+  background: var(--c-face-light);
+}
+
+.nav__link:active,
+.nav__link.is-active {
+  border-color: var(--bevel-in);
+  background: var(--c-face-light);
+  font-weight: 700;
+}
+
+.nav__link:focus-visible {
+  outline: 2px dotted var(--c-title-1);
+  outline-offset: 2px;
+}
+
+/* ---------- Content (inset, scrollable) ---------- */
+.window__content {
+  flex: 1;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  margin: 0 6px;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  background: #fbfbf7;
+  border: 2px solid;
+  border-color: var(--bevel-in);
+  scrollbar-color: var(--c-face-dark) var(--c-face);
+}
+
+.window__content::-webkit-scrollbar {
+  width: 16px;
+}
+.window__content::-webkit-scrollbar-track {
+  background: var(--c-face);
+}
+.window__content::-webkit-scrollbar-thumb {
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+}
+
+.section {
+  padding-block: clamp(1rem, 3vw, 1.6rem);
+  scroll-margin-top: 1rem;
+}
+.section + .section {
+  border-top: 1px dashed var(--c-face-dark);
+}
+
+.section__heading {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  margin: 0 0 0.75rem;
+  color: var(--c-title-1);
+}
+
+.prose {
+  line-height: 1.6;
+  max-width: 62ch;
+  margin: 0 0 0.8rem;
+}
+
+/* ---------- Hero ---------- */
+.section--hero {
+  text-align: center;
+}
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #000;
+  color: var(--c-led);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 4px 0;
+  border: 2px solid;
+  border-color: var(--bevel-in);
+  margin-bottom: 1.25rem;
+}
+
+.marquee__text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 22s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.hero__heading {
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  margin: 0.25rem 0;
+  color: var(--c-title-1);
+  text-shadow: 2px 2px 0 #fff, 3px 3px 0 var(--c-face-dark);
+}
+
+.hero__tagline {
+  font-weight: 700;
+  color: var(--c-accent);
+  margin: 0 0 1rem;
+}
+
+.hero__intro {
+  line-height: 1.6;
+  max-width: 60ch;
+  margin: 0 auto 1.5rem;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  min-width: 110px;
+  padding: 0.6rem 1rem;
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.stat__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--c-title-1);
+}
+
+.stat__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #555;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--c-ink);
+  padding: 8px 20px;
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+  cursor: pointer;
+}
+
+.btn:active {
+  border-color: var(--bevel-in);
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 2px dotted var(--c-title-1);
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  background: linear-gradient(180deg, #ffe487, #ffbe2e);
+}
+
+.btn--mail {
+  background: linear-gradient(180deg, #bfe3ff, #6cb6f0);
+}
+
+/* ---------- Service cards ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 0.85rem;
+}
+
+.card {
+  padding: 1rem;
+  background: var(--c-face-light);
+  border: 2px solid;
+  border-color: var(--bevel-out);
+}
+
+.card__glyph {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.card__title {
+  margin: 0 0 0.4rem;
+  color: var(--c-title-1);
+  font-size: 1.05rem;
+}
+
+.card__body {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* ---------- Status bar ---------- */
+.window__status {
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px 6px;
+  font-size: 0.78rem;
+}
+
+.status__cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 2px 8px;
+  background: var(--c-face);
+  border: 2px solid;
+  border-color: var(--bevel-in);
+  white-space: nowrap;
+}
+
+.status__cell--grow {
+  flex: 1;
+  color: #444;
+}
+
+.counter {
+  display: inline-flex;
+  gap: 2px;
+  padding: 1px;
+  background: #000;
+}
+
+.counter__digit {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--c-led);
+  background: #061a0c;
+  padding: 0 3px;
+}
+
+.status__clock {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+a {
+  color: var(--c-link);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__text {
+    animation: none;
+    padding-left: 0;
+  }
+  .window__content {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "titan-applications",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "description": "Single-page site for Titan Applications (titan-applications.com)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5"
+  }
+}
